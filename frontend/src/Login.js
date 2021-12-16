@@ -10,7 +10,10 @@ const Login = () => {
     const navigate = useNavigate();
     
     const handlePush = () => {
-        navigate('/');
+        navigate('/home');
+    }
+    const handlePushReg = () => {
+        navigate('/register');
     }
     const handleChange = e => e.target.type === "email" ? setEmail(e.target.value): setPassword(e.target.value);
     const handleClick = () => {
@@ -32,6 +35,7 @@ const Login = () => {
         })
         .then(data => {
             sessionStorage.setItem("token", data.access_token);
+            sessionStorage.setItem("ID", data.id);
             handlePush();
         })
         .catch(error => {
@@ -76,6 +80,16 @@ const Login = () => {
                     >
                         Submit
                 </Button>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Don't have an account?</Form.Label>
+                    <Button
+                        variant="primary"
+                        type="button"
+                        onClick={handlePushReg}
+                        >
+                            Register
+                    </Button>
+                </Form.Group>
             </Form>
         }
     </div>

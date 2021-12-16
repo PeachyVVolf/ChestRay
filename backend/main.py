@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity, create_access_token
 
@@ -26,7 +26,8 @@ class Users(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-@app.route("/reg", methods=["POST", "GET"])
+#register
+@app.route("/reg", methods=["POST"])
 def create_user():
     Demail = request.json.get("email", None)
     Dpassword = request.json.get("password", None)
@@ -43,6 +44,7 @@ def create_user():
             state=True)
 
     return jsonify({"msg": "Email Exists"}), 401
+#login
 
 
 @app.route("/token", methods=["POST"])
@@ -50,12 +52,20 @@ def create_token():
     Demail = request.json.get("email", None)
     Dpassword = request.json.get("password", None)
     if Users.query.filter_by(email = Demail).filter_by(password = Dpassword).first():
+        userA = db.session.query(Users).filter_by(email = Demail).filter_by(password = Dpassword).first()
         access_token = create_access_token(identity=Demail)
-        return jsonify(access_token=access_token)
+        return jsonify({"access_token": access_token, "id": userA.id})
 
     return jsonify({"msg": "Incorrect email or password"}), 401
 
-
+#display userdata
+@app.route("/homedata", methods=["POST"])
+def get_userData():
+    Did = request.json.get("id", None)
+    person = Users.query.filter_by(id=Did).first()
+    return jsonify({"name": person.name, "email": person.email,
+                    "gender":person.gender, "age":person.age})
+    
 
 if __name__ == "__main__":
     app.run(debug=True)

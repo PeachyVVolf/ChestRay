@@ -14,6 +14,9 @@ function LandingPage() {
         else
             navigate("/login");
     }
+    const handleClickReg = () => {
+            navigate("/register");
+    }
 
     return ( 
         <div>
@@ -26,14 +29,22 @@ function LandingPage() {
                     >
                         Log Out
                 </Button> : 
-                
-                <Button
+                <div>
+                    <Button
+                        variant="primary"
+                        type="button"
+                        onClick={handleClick}
+                        >
+                            Log In
+                    </Button>
+                    <Button
                     variant="primary"
                     type="button"
-                    onClick={handleClick}
+                    onClick={handleClickReg}
                     >
-                        Log In
-                </Button>
+                        Register
+                    </Button>
+            </div>
             }
         </div>
     );

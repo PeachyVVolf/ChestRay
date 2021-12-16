@@ -9,7 +9,6 @@ const Register = () => {
     const [name, setName]= useState( '' );
     const [age, setAge]= useState( '' );
     const [gender, setGender]= useState( '' );
-    const token = sessionStorage.getItem("token");
     const navigate = useNavigate();
     
     const handlePush = () => {
@@ -17,11 +16,16 @@ const Register = () => {
     }
 
     const handleChange = e =>{
-        e.target.type === "email" ? setEmail(e.target.value) : setEmail(email); 
-        e.target.type ==="password" ? setPassword(e.target.value): setPassword(password);
-        e.target.type === "name" ? setName(e.target.value): setName(name);
-        e.target.type === "age" ? setAge(e.target.value): setAge(age);
-        e.target.type === "gender" ? setGender(e.target.value): setGender(gender);
+        if(e.target.name === "email")
+            setEmail(e.target.value); 
+        else if(e.target.name ==="password")
+            setPassword(e.target.value);
+        else if(e.target.name === "name")
+            setName(e.target.value);
+        else if(e.target.name === "age")
+            setAge(e.target.value);
+        else if(e.target.name === "gender")
+            setGender(e.target.value);
         }
     const handleClick = () => {
 
@@ -59,71 +63,73 @@ const Register = () => {
     return (
     <div>
         <h2>Register</h2>
-        <hr />
-        {(token && token!=="" && token!==undefined) ? "You are Logged In" : 
+        <hr />       
+        <Form>
+            <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                onChange={handleChange}
+                />
+            </Form.Group>
+    
+            <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="formBasicName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                type="text"
+                name="name"
+                placeholder="Name"
+                onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="formBasicAge">
+                <Form.Label>Age</Form.Label>
+                <Form.Control
+                type="text"
+                name="age"
+                placeholder="Age"
+                onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="formBasicGender">
+                <Form.Label>Gender</Form.Label>
+                <Form.Control
+                type="text"
+                name="gender"
+                placeholder="Gender"
+                onChange={handleChange}
+                />
+            </Form.Group>
+            <Button
+                variant="primary"
+                type="button"
+                onClick={handleClick}
+                >
+                    Submit
+            </Button>
             
-            <Form>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    onChange={handleChange}
-                    />
-                </Form.Group>
-        
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                    type="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formBasicName">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                    type="name"
-                    placeholder="Name"
-                    onChange={handleChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formBasicAge">
-                    <Form.Label>Age</Form.Label>
-                    <Form.Control
-                    type="age"
-                    placeholder="Age"
-                    onChange={handleChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formBasicGender">
-                    <Form.Label>Gender</Form.Label>
-                    <Form.Control
-                    type="gender"
-                    placeholder="Gender"
-                    onChange={handleChange}
-                    />
-                </Form.Group>
-                <Button
-                    variant="primary"
-                    type="button"
-                    onClick={handleClick}
-                    >
-                        Submit
-                </Button>
-                
-                <Form.Group controlId="formBasicGender">
-                    <Form.Label>Already have an account?</Form.Label>
-                <Button
-                    variant="primary"
-                    type="button"
-                    onClick={handlePush}
-                    >
-                        Login
-                </Button>
-                </Form.Group>
-            </Form>
-        }
+            <Form.Group controlId="formBasicAcc">
+                <Form.Label>Already have an account?</Form.Label>
+            <Button
+                variant="primary"
+                type="button"
+                onClick={handlePush}
+                >
+                    Login
+            </Button>
+            </Form.Group>
+        </Form>    
     </div>
     );
   }
