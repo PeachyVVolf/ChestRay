@@ -28,7 +28,7 @@ const Login = () => {
         fetch('http://localhost:3000/token', opts)
         .then(resp => {
             if(resp.status === 200) return resp.json();
-            else alert("Some error");
+            else alert("Incorrect Email or Password");
         })
         .then(data => {
             sessionStorage.setItem("token", data.access_token);
