@@ -87,7 +87,6 @@ def get_userData():
     return jsonify({"name": person.name, "email": person.email,
                     "gender":person.gender, "age":person.age})
 
-
 #get XrayData
 @app.route("/xrays", methods=["POST"])
 def getXRays():
@@ -104,10 +103,12 @@ def getXRays():
 @app.route("/addxray", methods=["POST"])
 def create_xray():
     Dimage = request.json.get("image", None)
-    Dreport = request.json.get("report", None)
     Did = request.json.get("id", None)
 
-    xray = XRay(userID=Did, report=Dreport, image=Dimage)
+    report = Report(Diseases="default disease", Probabilities="65%")
+    db.session.add(report)
+    db.session.flush()
+    xray = XRay(userID=Did, report=report.id, image=Dimage)
     db.session.add(xray)
     db.session.commit()
     return jsonify(
@@ -135,12 +136,21 @@ def uploadImage(id):
         json.dump(data, outfile)
     return (redirect(url))
 
+#get Image
 @app.route("/getImg/<int:imgID>")
 def get_img(imgID):
     img = Image.query.filter_by(id=imgID).first()
     if not img:
         return 'No Image', 404
     return Response(img.img, mimetype=img.mimetype )
+
+#get Report
+@app.route("/getReport/<int:repID>")
+def get_rep(repID):
+    rep = Report.query.filter_by(id=repID).first()
+    if not rep:
+        return 'No Report', 404
+    return jsonify({'disease': rep.Diseases, 'prob':rep.Probabilities})
 
 if __name__ == "__main__":
     app.run(debug=True)

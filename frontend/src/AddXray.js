@@ -8,15 +8,6 @@ const AddXray = () => {
     const [report, setReport]= useState( '' );
     const ID = sessionStorage.getItem("ID");
     const navigate = useNavigate();
-    
-    const handleChange = e =>{
-        if(e.target.name === "image")
-            setImage(e.target.value); 
-        else if(e.target.name ==="report")
-            setReport(e.target.value);
-        else if(e.target.name === "image")
-            setImage(e.target.value);
-        }
 
     const getData=()=>{
         fetch('temp.json'
@@ -28,7 +19,6 @@ const AddXray = () => {
         }
         )
             .then(function(response){
-            console.log(response)
             return response.json();
             })
             .then(function(myJson) {
@@ -74,16 +64,7 @@ const AddXray = () => {
             <input type="submit" value="Upload Image"/>
         </form>
         <Form>    
-            
-            <Form.Group controlId="formBasicReportID">
-                <Form.Label>Report</Form.Label>
-                <Form.Control
-                type="text"
-                name="report"
-                placeholder="reportID"
-                onChange={handleChange}
-                />
-            </Form.Group>
+
             <Button
                 variant="primary"
                 type="button"
