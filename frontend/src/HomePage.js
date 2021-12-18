@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
+import XrayHistory from './XrayHistory';
 
 function HomePage() {
     const [name, setName] = useState('');
@@ -64,6 +65,7 @@ function HomePage() {
                         >
                             Log Out
             </Button>
+            <XrayHistory />
         </div>
      );
 }

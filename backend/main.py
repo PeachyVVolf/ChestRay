@@ -1,7 +1,10 @@
 import os
-from flask import Flask, request, jsonify, g
+from datetime import datetime
+from flask import Flask, request, jsonify, redirect, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity, create_access_token
+from werkzeug.utils import secure_filename
+import json
 
 app = Flask(__name__)
 
@@ -26,6 +29,25 @@ class Users(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
+class Report(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    Diseases = db.Column(db.String)
+    Probabilities = db.Column(db.String)
+
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    img = db.Column(db.Text, unique=True, nullable=False)
+    name = db.Column(db.Text, nullable=False)
+    mimetype = db.Column(db.Text, nullable=False)
+    userID = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+class XRay(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    report = db.Column(db.Integer, db.ForeignKey("report.id"), nullable=False)
+    image = db.Column(db.Integer, db.ForeignKey("image.id"), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+
 #register
 @app.route("/reg", methods=["POST"])
 def create_user():
@@ -44,9 +66,8 @@ def create_user():
             state=True)
 
     return jsonify({"msg": "Email Exists"}), 401
+
 #login
-
-
 @app.route("/token", methods=["POST"])
 def create_token():
     Demail = request.json.get("email", None)
@@ -65,7 +86,61 @@ def get_userData():
     person = Users.query.filter_by(id=Did).first()
     return jsonify({"name": person.name, "email": person.email,
                     "gender":person.gender, "age":person.age})
-    
+
+
+#get XrayData
+@app.route("/xrays", methods=["POST"])
+def getXRays():
+    Did = request.json.get("id", None)
+    xrays = XRay.query.filter_by(userID=Did).all()
+    outlist = []
+    for xray in xrays:
+        output = {"id":xray.id, "report":xray.report,
+         "image":xray.image, "date":xray.date}
+        outlist.append(output)
+    return jsonify({'xray': outlist})
+
+#Add Xray
+@app.route("/addxray", methods=["POST"])
+def create_xray():
+    Dimage = request.json.get("image", None)
+    Dreport = request.json.get("report", None)
+    Did = request.json.get("id", None)
+
+    xray = XRay(userID=Did, report=Dreport, image=Dimage)
+    db.session.add(xray)
+    db.session.commit()
+    return jsonify(
+        state=True)
+
+#Upload Image
+@app.route("/upload/<int:id>", methods=["POST"])
+def uploadImage(id):
+    pic=request.files["image"]
+    if not pic:
+        return 'Picture not uploaded', 400
+
+    filename = secure_filename(pic.filename)
+    mimetype = pic.mimetype
+
+    img = Image(img = pic.read(), name=filename, mimetype=mimetype, userID=id)
+    db.session.add(img)
+    db.session.commit()
+    url = "http://localhost:3000/addXray"
+    data = {}
+    data['imgID'] = [{
+        'id': img.id}
+    ]
+    with open("E:/University/Semester 6/ChestRay/frontend/public/temp.json", 'w') as outfile:
+        json.dump(data, outfile)
+    return (redirect(url))
+
+@app.route("/getImg/<int:imgID>")
+def get_img(imgID):
+    img = Image.query.filter_by(id=imgID).first()
+    if not img:
+        return 'No Image', 404
+    return Response(img.img, mimetype=img.mimetype )
 
 if __name__ == "__main__":
     app.run(debug=True)

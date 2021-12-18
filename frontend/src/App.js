@@ -4,6 +4,7 @@ import Login from './Login'
 import LandingPage from './landingPage';
 import Register from './Register';
 import HomePage from './HomePage';
+import AddXray from './AddXray';
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
           <Route exact path='/register' element={< Register />}>
           </Route>
           <Route exact path='/home' element={< HomePage />}>
+          </Route>
+          <Route exact path='/addXray' element={< AddXray />}>
           </Route>
         </Routes>
       </BrowserRouter>
