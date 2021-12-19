@@ -6,7 +6,8 @@ export default {
         marginLeft: "4%",
         fontSize: "2em",
         marginTop: "5%",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textDecoration: "none!important"
     },
     logoButton1: {
         backgroundColor: "rgb(174,235,249)",

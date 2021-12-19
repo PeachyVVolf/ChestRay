@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { useNavigate } from 'react-router-dom';
 import Report from './report';
+import { withStyles } from '@mui/styles';
+import styles from './css/XrayHistoryStyles';
 
-function XrayHistory() {
+const XrayHistory = (props) => {
+    const { classes } = props;
     const [xrays, setXrays] = useState("");
     const [openX, setOpenX] = useState(false);
     const [rep, setRep] = useState("");
     const [loading, setLoading] = useState(false);
+    const [disease, setDisease] = useState([]);
     const navigate = useNavigate();
     const ID = sessionStorage.getItem("ID");
-
-    const handleClick = () => {
-        navigate('/addXray')
-    }
 
     const handleClickOpen = (x) => {
         if(openX === false){
@@ -64,46 +64,120 @@ function XrayHistory() {
             alert("You need to Log In")
             navigate('/login')
         }}
+      
     });
+
+    const getDisease = (x, index) => {
+        
+        const opts = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        if(x.report !== "" && x.report!==undefined && (disease[index]==="" || disease[index]===undefined) && (disease[index+1]===undefined || disease[index+1]==="")){
+            const url = "http://localhost:3000/getReport/"+x.report;
+            fetch(url, opts)
+            .then(resp => {
+                if(resp.status === 200) {
+                    return resp.json();
+                }
+            })
+            .then(data =>{
+                if(data.disease !== undefined && data.disease !== ""){
+                    let a = disease.slice();
+                    a[index] = data.disease;
+                    setDisease(a);
+                }
+            })
+            .catch(error => {
+                
+            })
+        }
+    }
+
+    const renderTableData = () => {
+        return xrays.map((x, index) => {
+           const { id, image, date } = x //destructuring
+           return (
+              <div key={id}>
+                  {getDisease(x, index)}
+                  <div className='row'>
+                        <div className={`col-3 ${classes.tableData}`}>
+                            <img src={`http://127.0.0.1:5000/getImg/${x.image}`} style={{maxWidth: '100px', maxHeight: '100px'}}/>
+                        </div>
+                        <div className={`col-3 ${classes.tableData}`}>
+                            {date}
+                        </div>
+                        <div className={`col-3 ${classes.tableData}`}>
+                            {disease[index] !== "" && disease[index]!==undefined? disease[index] : 'none'}
+                        </div>
+                        <div className={`col-3 ${classes.tableData}`}>
+                            <Button
+                            variant="primary"
+                            type="button"
+                            className= {classes.tableDataButton}
+                            onClick={() => handleClickOpen(x)}
+                            >
+                                View Report
+                            </Button>
+                        </div>
+                    </div> 
+                    <br />
+              </div>
+           )
+        })
+     }
 
     return ( 
         <div>
-            <Button
-                        variant="primary"
-                        type="button"
-                        onClick={handleClick}
-                        >
-                            Add Xray
-            </Button>
-            {openX === true ?
-                <div>
-                    <h1>Report</h1>
-                    <Report click={handleClickOpen} report={rep}/>
-                </div>
-            :
-                <div>
-                <h1>Xrays</h1>
-                {loading === true ?
-                    <ul>
-                        {xrays.map(x => <li key={x.id}>
-                            <p> <b>Image:</b> <img src={`http://127.0.0.1:5000/getImg/${x.image}`} style={{maxWidth: '100px', maxHeight: '100px'}}/> <b>Date:</b> {x.date}
-                                    <Button
-                                        variant="primary"
-                                        type="button"
-                                        onClick={() => handleClickOpen(x)}
-                                        >
-                                            Open Report
-                                    </Button>
-                                </p>
-                            </li>)}
-                    </ul>
+            <div className='row'>
+                {openX === true ?
+                    <div>
+                        <h1>Report</h1>
+                        <Report click={handleClickOpen} report={rep}/>
+                    </div>
                 :
-                    <h1>Loading...</h1>
+                    <div>
+                    <h1 className={classes.title}>History</h1>
+                        <div className={classes.historyBox}>
+                            <br />
+                            <div className={classes.dataBox}>
+                                {loading === true ?
+                                    <div>
+                                        <div className='row'>
+                                            <div className={`col-3 ${classes.header}`}>
+                                                Image
+                                            </div>
+                                            <div className={`col-3 ${classes.header}`}>
+                                                Date
+                                            </div>
+                                            <div className={`col-3 ${classes.header}`}>
+                                                Disease
+                                            </div>
+                                            <div className={`col-3 ${classes.header}`}>
+                                                Report
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div id='data'>
+                                            <div>
+                                                {renderTableData()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                :
+                                    <h1>Loading...</h1>
+                                }
+                            </div>
+                            
+                            <br />
+                        </div>
+                    </div>   
                 }
-                </div>   
-            }
+            </div>
         </div>
      );
 }
 
-export default XrayHistory;
+export default withStyles(styles)(XrayHistory);
