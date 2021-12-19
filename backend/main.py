@@ -165,6 +165,23 @@ def change_pass():
     db.session.commit()
     return jsonify("Password Changed")
 
+#changeProfileInfo
+@app.route("/changeProfile", methods=["POST"])
+def change_profile():
+    newEmail = request.json.get("newEmail", None)
+    newName = request.json.get("newName", None)
+    newAge = request.json.get("newAge", None)
+    newGender = request.json.get("newGender", None)
+    user = Users.query.filter_by(email=newEmail).first()
+    if not user:
+        return jsonify("Email doesn't exist"), 404
+    user.name = newName
+    print(newName, newAge, newGender, newEmail)
+    user.age = newAge
+    user.email = newEmail
+    user.gender = newGender
+    db.session.commit()
+    return jsonify("Info Changed")
 
 if __name__ == "__main__":
     app.run(debug=True)

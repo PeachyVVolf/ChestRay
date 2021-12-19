@@ -25,7 +25,6 @@ function Report(props) {
                 if(resp.status === 200) {
                     return resp.json();
                 }
-                else alert("Error..no rep");
             })
             .then(data =>{
                 setDisease(data.disease);

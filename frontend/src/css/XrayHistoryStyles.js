@@ -15,6 +15,19 @@ export default {
         "&:hover":{
             backgroundColor: "rgb(4,98,119)",
             color: "white"
+        },
+        [sizes.down("mlg")]: {
+        },
+        [sizes.down("lg")]: {
+        },
+        [sizes.down("md")]: {
+        },
+        [sizes.down("sm")]: {
+        },
+        [sizes.down("xs")]: {
+            margin: "5% 0% 5% 2%",
+            padding: "2% 2% 2% 2%",
+            fontSize: "12px"
         }
     },
     historyBox: {
@@ -25,6 +38,39 @@ export default {
     dataBox: {
         backgroundColor: "white",
         margin: "5% 11% 5% 11%",
-        padding: "2% 7% 2% 7%"
+        padding: "2% 7% 2% 7%",
+        [sizes.down("mlg")]: {
+            margin: "5% 11% 5% 11%",
+            padding: "2% 7% 2% 7%"
+        },
+        [sizes.down("lg")]: {
+            margin: "5% 11% 5% 11%",
+            padding: "2% 7% 2% 7%"
+        },
+        [sizes.down("md")]: {
+            margin: "5% 11% 5% 11%",
+            padding: "2% 7% 2% 7%"
+        },
+        [sizes.down("sm")]: {
+            margin: "5% 11% 5% 11%",
+            padding: "2% 7% 2% 7%"
+        },
+        [sizes.down("xs")]: {
+            margin: "5% 2% 5% 2%",
+            padding: "2% 2% 2% 2%"
+        }
+    },
+    tableData: {
+        [sizes.down("mlg")]: {
+        },
+        [sizes.down("lg")]: {
+        },
+        [sizes.down("md")]: {
+        },
+        [sizes.down("sm")]: {
+        },
+        [sizes.down("xs")]: {
+            margin: "5% 0% 5% 2%"
+        }
     }
 };

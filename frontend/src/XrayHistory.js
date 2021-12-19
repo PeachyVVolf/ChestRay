@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Report from './report';
 import { withStyles } from '@mui/styles';
 import styles from './css/XrayHistoryStyles';
+import Sidebar from './SideBar';
 
 const XrayHistory = (props) => {
     const { classes } = props;
@@ -13,6 +14,7 @@ const XrayHistory = (props) => {
     const [loading, setLoading] = useState(false);
     const [disease, setDisease] = useState([]);
     const navigate = useNavigate();
+    const token = sessionStorage.getItem("token");
     const ID = sessionStorage.getItem("ID");
 
     const handleClickOpen = (x) => {
@@ -103,7 +105,7 @@ const XrayHistory = (props) => {
               <div key={id}>
                   {getDisease(x, index)}
                   <div className='row'>
-                        <div className={`col-3 ${classes.tableData}`}>
+                        <div className={`col-3 ${classes.tableData} ${classes.tableImage}`}>
                             <img src={`http://127.0.0.1:5000/getImg/${x.image}`} style={{maxWidth: '100px', maxHeight: '100px'}}/>
                         </div>
                         <div className={`col-3 ${classes.tableData}`}>
@@ -127,54 +129,66 @@ const XrayHistory = (props) => {
               </div>
            )
         })
-     }
+    }
+
+    const handleClickLogOut = () => {
+        if (token && token!=="" && token!==undefined){
+            sessionStorage.removeItem("token");
+            navigate("/login")
+        }
+    }
 
     return ( 
         <div>
             <div className='row'>
-                {openX === true ?
-                    <div>
-                        <h1>Report</h1>
-                        <Report click={handleClickOpen} report={rep}/>
-                    </div>
-                :
-                    <div>
-                    <h1 className={classes.title}>History</h1>
-                        <div className={classes.historyBox}>
-                            <br />
-                            <div className={classes.dataBox}>
-                                {loading === true ?
-                                    <div>
-                                        <div className='row'>
-                                            <div className={`col-3 ${classes.header}`}>
-                                                Image
-                                            </div>
-                                            <div className={`col-3 ${classes.header}`}>
-                                                Date
-                                            </div>
-                                            <div className={`col-3 ${classes.header}`}>
-                                                Disease
-                                            </div>
-                                            <div className={`col-3 ${classes.header}`}>
-                                                Report
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <div id='data'>
-                                            <div>
-                                                {renderTableData()}
-                                            </div>
-                                        </div>
-                                    </div>
-                                :
-                                    <h1>Loading...</h1>
-                                }
-                            </div>
-                            
-                            <br />
+                <div className={`col-2 ${classes.navBar}`}> 
+                    <Sidebar logOut={handleClickLogOut}/>
+                </div>
+                <div className={`col-10`}> 
+                    {openX === true ?
+                        <div>
+                            <h1>Report</h1>
+                            <Report click={handleClickOpen} report={rep}/>
                         </div>
-                    </div>   
-                }
+                    :
+                        <div>
+                            <h1 className={classes.title}>History</h1>
+                            <div className={classes.historyBox}>
+                                <br />
+                                <div className={classes.dataBox}>
+                                    {loading === true ?
+                                        <div>
+                                            <div className='row'>
+                                                <div className={`col-3 ${classes.header}`}>
+                                                    Image
+                                                </div>
+                                                <div className={`col-3 ${classes.header}`}>
+                                                    Date
+                                                </div>
+                                                <div className={`col-3 ${classes.header}`}>
+                                                    Disease
+                                                </div>
+                                                <div className={`col-3 ${classes.header}`}>
+                                                    Report
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div id='data'>
+                                                <div>
+                                                    {renderTableData()}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    :
+                                        <h1>Loading...</h1>
+                                    }
+                                </div>
+                                
+                                <br />
+                            </div>
+                        </div>   
+                    }
+                </div>
             </div>
         </div>
      );

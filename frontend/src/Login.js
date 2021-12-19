@@ -70,7 +70,18 @@ const Login = (props) => {
         <div>
             <h2 className={classes.loginTitle}>LOGIN</h2>
             <div className={classes.loginBox}>
-                {(token && token!=="" && token!==undefined) ? "You are Logged In" : 
+                {(token && token!=="" && token!==undefined) ? 
+                            <div>
+                                <h1>You are already logged in</h1>
+                                <Button
+                                className={classes.loginTextSubmit}
+                                variant="primary"
+                                type="button"
+                                onClick={handleClick}
+                                >
+                                    Home
+                                </Button>
+                            </div> : 
                     
                     <Form>
                         <Form.Group className={classes.loginTextBox} controlId="formBasicEmail">

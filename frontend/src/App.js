@@ -6,6 +6,9 @@ import Register from './Register';
 import HomePage from './HomePage';
 import AddXray from './AddXray';
 import ForgotPass from './ForgotPass';
+import Profile from './Profile';
+import XrayHistory from './XrayHistory';
+import EditProfile from './EditProfile';
 
 function App() {
 
@@ -21,9 +24,15 @@ function App() {
           </Route>
           <Route exact path='/home' element={< HomePage />}>
           </Route>
-          <Route exact path='/addXray' element={< AddXray />}>
-          </Route>
           <Route exact path='/forgotPass' element={< ForgotPass />}>
+          </Route>
+          <Route exact path='/user' element={< Profile />}>
+          </Route>
+          <Route exact path='/generateReport' element={< AddXray />}>
+          </Route>
+          <Route exact path='/history' element={< XrayHistory />}>
+          </Route>
+          <Route exact path='/user/update' element={< EditProfile />}>
           </Route>
         </Routes>
       </BrowserRouter>

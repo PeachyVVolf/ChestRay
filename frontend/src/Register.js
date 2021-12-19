@@ -38,6 +38,8 @@ const Register = (props) => {
             setErr("User must be 18 or above")
         }else if(hasNumber.test(name)){
             setErr("Digits not allowed")
+        }else{
+            setErr("")
         }
     }
 

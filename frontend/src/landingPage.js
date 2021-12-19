@@ -1,6 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Navbar, Nav, Container } from "react-bootstrap";
 import { withStyles } from '@mui/styles';
 import styles from './css/LandingPageStyles';
 
@@ -8,18 +6,6 @@ const LandingPage = (props) => {
     const { classes } = props;
     
     const token = sessionStorage.getItem("token");
-    const navigate = useNavigate();
-    const handleClick = () => {
-        if (token && token!=="" && token!==undefined){
-            sessionStorage.removeItem("token");
-            navigate("/")
-        }
-        else
-            navigate("/login");
-    }
-    const handleClickReg = () => {
-            navigate("/register");
-    }
 
     return ( 
         <div>

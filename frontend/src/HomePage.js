@@ -8,6 +8,7 @@ import { withStyles } from '@mui/styles';
 import styles from './css/HomeStyles';
 import dashImg from './Images/DashboardChest.jpg';
 import userImg from './Images/user.png';
+import Sidebar from './SideBar';
 
 const HomePage = (props) => {
     const { classes } = props;
@@ -16,6 +17,7 @@ const HomePage = (props) => {
     const [email, setEmail] = useState('');
     const [gender, setGender] = useState('');
     const [page, setPage] = useState( '' );
+    const [open, setOpen] = useState(false);
     const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
     ];
@@ -32,22 +34,6 @@ const HomePage = (props) => {
             sessionStorage.removeItem("token");
             navigate("/login")
         }
-    }
-    const handleClickHistory = () => {
-        setPage('History');
-        localStorage.setItem('openPage', JSON.stringify('History'))
-    }
-    const handleClickGenerateReport = () => {
-        setPage('Generate Report');
-        localStorage.setItem('openPage', JSON.stringify('Generate Report'))
-    }
-    const handleClickProfile = () => {
-        setPage('Profile');
-        localStorage.setItem('openPage', JSON.stringify('Profile'))
-    }
-    const handleClickDashboard = () => {
-        setPage('Dashboard');
-        localStorage.setItem('openPage', JSON.stringify('Dashboard'))
     }
 
     useEffect(() => {
@@ -89,20 +75,8 @@ const HomePage = (props) => {
        <div className={classes.root}>
             <div>
                 <div className='row'>
-                    <div className={`col-2 ${classes.navBar}`}>
-                            <h1 className={classes.title}>ChestRay</h1>
-                            <p onClick={handleClickDashboard} className={`${classes.navItem} ${page === 'Dashboard'? `${classes.active}`: 'hidden'}`}>Dashboard</p>
-                            <p onClick={handleClickProfile} className={`${classes.navItem} ${page === 'Profile'? `${classes.active}`: 'hidden'}`}>My Profile</p>
-                            <p onClick={handleClickGenerateReport} className={`${classes.navItem} ${page === 'Generate Report'? `${classes.active}`: 'hidden'}`}>Generate Report</p>
-                            <p onClick={handleClickHistory} className={`${classes.navItem} ${page === 'History'? `${classes.active}`: 'hidden'}`}>History</p>
-                            <br /><br /><br /><br />
-                            <p onClick={handleClickLogOut} className={classes.navItem}>Log Out</p>
-                            <br /><br /><br /><br />
-                            <br /><br /><br /><br />
-                            <br /><br /><br /><br />
-                            <br /><br /><br /><br />
-                            <br /><br /><br /><br />
-                            <br /><br /><br /><br />
+                    <div className={`col-2 ${classes.navBar}`}> 
+                        <Sidebar logOut={handleClickLogOut}/>
                     </div>
                     <div className='col-10'>
                         {page === 'Dashboard' ? 

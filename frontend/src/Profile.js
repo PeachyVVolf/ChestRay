@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import XrayHistory from './XrayHistory';
-import AddXray from './AddXray';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { withStyles } from '@mui/styles';
-import styles from './css/HomeStyles';
+import Button from "react-bootstrap/Button";
+import styles from './css/ProfileStyles';
+import Sidebar from './SideBar';
 
 const Profile = (props) => {
     const { classes } = props;
@@ -17,7 +17,17 @@ const Profile = (props) => {
     const token = sessionStorage.getItem("token");
     const ID = sessionStorage.getItem("ID");
 
+    const handleClick = () => {
+        navigate("./update");
+    }
 
+    const handleClickLogOut = () => {
+        if (token && token!=="" && token!==undefined){
+            sessionStorage.removeItem("token");
+            navigate("/login")
+        }
+    }
+    
     useEffect(() => {
         
         if (token && token!=="" && token!==undefined){
@@ -53,10 +63,33 @@ const Profile = (props) => {
 
     return ( 
             <div>
-                <h1>Welcome {name}</h1>
-                <p>Age: {age}</p>
-                <p>Gender: {gender}</p>
-                <p>Email: {email}</p>
+                <div className='row'>
+                    <div className={`col-2 ${classes.navBar}`}> 
+                        <Sidebar logOut={handleClickLogOut}/>
+                    </div>
+                    <div className={`col-10 ${classes.mainArea}`}> 
+                        <h1 className={classes.profileHeader}>My Profile</h1>
+                        <div className={classes.profileArea}>
+                            <h3>Full Name:</h3>
+                            <p>{name}</p>
+                            <h3>Email:</h3>
+                            <p>{email}</p>
+                            <h3>Age:</h3>
+                            <p>{age}</p>
+                            <h3>Gender:</h3>
+                            <p>{gender}</p>
+                               
+                            <Button
+                                variant="primary"
+                                type="button"
+                                className={classes.editButton}
+                                onClick={handleClick}
+                                >
+                                    Edit Profile
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
      );
 }
