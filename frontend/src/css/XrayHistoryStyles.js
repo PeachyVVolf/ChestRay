@@ -72,5 +72,14 @@ export default {
         [sizes.down("xs")]: {
             margin: "5% 0% 5% 2%"
         }
+    },
+    reportMainArea:{
+        backgroundColor: "rgb(174,235,249)",
+        margin: "1%",
+        padding: "2%"
+    },
+    reportHeader: {
+        textAlign: "center",
+        fontWeight: "bold"
     }
 };

@@ -146,8 +146,8 @@ const XrayHistory = (props) => {
                 </div>
                 <div className={`col-10`}> 
                     {openX === true ?
-                        <div>
-                            <h1>Report</h1>
+                        <div className={classes.reportMainArea}>
+                            <h1 className={classes.reportHeader}>Report Details</h1>
                             <Report click={handleClickOpen} report={rep}/>
                         </div>
                     :

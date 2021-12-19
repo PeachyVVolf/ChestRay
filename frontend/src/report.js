@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component, PropTypes}  from 'react';
 import Button from 'react-bootstrap/esm/Button';
+import { withStyles } from '@mui/styles';
+import styles from './css/reportStyles';
+import ProgressBar from "./ProgressBar";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
-function Report(props) {
+
+const Report = (props) => {
+    const { classes } = props;
     const [rep, setReport] = useState("");
     const [disease, setDisease] = useState("");
     const [prob, setProb] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);    
 
     useEffect(() => {
         if(loading === false){
@@ -45,26 +52,51 @@ function Report(props) {
         props.click();
     }
 
+    const printDocument = () => {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'JPEG', 0, 0);
+            // pdf.output('dataurlnewwindow');
+            pdf.save("download.pdf");
+          })
+        ;
+      }
+
     return ( 
         <div>
             <Button
                 variant="primary"
                 type="button"
                 onClick={handleClick}
+                className={classes.backButton}
                 >
                     Back to Xrays
             </Button>
                 
             {loading ===true && rep!==""? 
             <div>
-                <br></br>
-                <img src={`http://localhost:3000/getImg/${rep.image}`} style={{maxWidth: '900px', maxHeight: '900px'}}/>
-                <p>
-                    Disease: {disease}
-                </p>
-                <p>
-                    Probability: {prob}
-                </p>
+                <div className='row'>
+                    <div className={`col-4 ${classes.repImage}`}>
+                        <img src={`http://localhost:3000/getImg/${rep.image}`} style={{maxWidth: '900px', maxHeight: '900px'}}/>
+                    </div>
+                    <div className={`col-8 ${classes.beforeReportArea}`}>
+                        <div id="divToPrint" className={classes.reportArea}>
+                            <h4>
+                                {disease}:    <ProgressBar bgcolor={'#6a1b9a'} completed={prob} />
+                            </h4>
+                            <p>
+                                
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="mb5">
+                    <button className={classes.printButton} onClick={printDocument}>Download Report</button>
+                </div>
             </div>
             :
             <h1>Loading...</h1>}
@@ -72,4 +104,4 @@ function Report(props) {
      );
 }
 
-export default Report;
+export default withStyles(styles)(Report);
