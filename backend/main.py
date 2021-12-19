@@ -152,5 +152,19 @@ def get_rep(repID):
         return 'No Report', 404
     return jsonify({'disease': rep.Diseases, 'prob':rep.Probabilities})
 
+#changePass
+@app.route("/changePass", methods=["POST"])
+def change_pass():
+    newEmail = request.json.get("newEmail", None)
+    newPass = request.json.get("newPass", None)
+    print(newPass)
+    user = Users.query.filter_by(email=newEmail).first()
+    if not user:
+        return jsonify("Email doesn't exist"), 404
+    user.password = newPass
+    db.session.commit()
+    return jsonify("Password Changed")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

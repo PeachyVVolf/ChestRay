@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from "react-bootstrap/Button";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import XrayHistory from './XrayHistory';
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import { withStyles } from '@mui/styles';
+import styles from './css/LoginStyles';
 
-function HomePage() {
+const HomePage = (props) => {
+    const { classes } = props;
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [email, setEmail] = useState('');
@@ -53,21 +57,36 @@ function HomePage() {
     });
 
     return ( 
-        <div>
-            <h1>Welcome {name}</h1>
-            <p>Age: {age}</p>
-            <p>Gender: {gender}</p>
-            <p>Email: {email}</p>
-            <Button
-                        variant="primary"
-                        type="button"
-                        onClick={handleClick}
-                        >
-                            Log Out
-            </Button>
-            <XrayHistory />
+       // <div>
+       <div className={classes.root}>
+            <h1 className={classes.title}>ChestRay</h1>
+            <div>
+                <div className='row'>
+                    <div className='col-3'>
+                        <p>Dashboard</p>
+                        <p>My Profile</p>
+                        <p>Generate Report</p>
+                        <p>History</p>
+                        <a onClick={handleClick}>Log Out</a>
+                    </div>
+                    <div className='col-9'>sssssssssssssssssssssssssssssssss</div>
+                </div>
+            </div>
         </div>
+        //    <h1>Welcome {name}</h1>
+        //    <p>Age: {age}</p>
+        //    <p>Gender: {gender}</p>
+        //    <p>Email: {email}</p>
+        //    <Button
+        //                variant="primary"
+        //                type="button"
+        //                onClick={handleClick}
+        //                >
+        //                    Log Out
+        //    </Button>
+        //    <XrayHistory />
+        //</div>
      );
 }
 
-export default HomePage;
+export default withStyles(styles)(HomePage);

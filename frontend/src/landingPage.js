@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from "react-bootstrap/Button";
+import { Button, Navbar, Nav, Container } from "react-bootstrap";
+import { withStyles } from '@mui/styles';
+import styles from './css/LandingPageStyles';
 
-function LandingPage() {
+const LandingPage = (props) => {
+    const { classes } = props;
     
     const token = sessionStorage.getItem("token");
     const navigate = useNavigate();
@@ -20,34 +23,18 @@ function LandingPage() {
 
     return ( 
         <div>
-            <h1>Landing Page</h1>
-            {(token && token!=="" && token!==undefined) ? 
-                <Button
-                    variant="primary"
-                    type="button"
-                    onClick={handleClick}
-                    >
-                        Log Out
-                </Button> : 
-                <div>
-                    <Button
-                        variant="primary"
-                        type="button"
-                        onClick={handleClick}
-                        >
-                            Log In
-                    </Button>
-                    <Button
-                    variant="primary"
-                    type="button"
-                    onClick={handleClickReg}
-                    >
-                        Register
-                    </Button>
+            <div>
+                <br />
+                <a data-inline="true" className={classes.logoText}>ChestRay</a>
+                <a href="/login" data-role="button" data-inline="true" className={classes.logoButton1}>LOG IN</a>
+                <a href="/register" data-role="button" data-inline="true" className={classes.logoButton}>SIGN UP</a><br /><br />
+                <div className={classes.mainBody}>
+                    <h1 className={classes.welcomeMsg}>Welcome to ChestRay</h1>
+                    <p className={classes.welcomeText}>Upload your Chest Xrays and get detailed analysis in one click</p>
+                </div>
             </div>
-            }
         </div>
     );
 }
 
-export default LandingPage;
+export default withStyles(styles)(LandingPage);

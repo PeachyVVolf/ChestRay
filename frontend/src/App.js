@@ -5,6 +5,7 @@ import LandingPage from './landingPage';
 import Register from './Register';
 import HomePage from './HomePage';
 import AddXray from './AddXray';
+import ForgotPass from './ForgotPass';
 
 function App() {
 
@@ -21,6 +22,8 @@ function App() {
           <Route exact path='/home' element={< HomePage />}>
           </Route>
           <Route exact path='/addXray' element={< AddXray />}>
+          </Route>
+          <Route exact path='/forgotPass' element={< ForgotPass />}>
           </Route>
         </Routes>
       </BrowserRouter>
