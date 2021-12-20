@@ -10,11 +10,11 @@ export default {
         paddingTop: "1%"
     },
     tableDataButton: {
-        backgroundColor: "rgb(6,154,187)",
-        border: "none",
+        backgroundColor: "rgb(6,154,187)!important",
+        border: "none!important",
         "&:hover":{
-            backgroundColor: "rgb(4,98,119)",
-            color: "white"
+            backgroundColor: "rgb(4,98,119)!important",
+            color: "white!important"
         },
         [sizes.down("mlg")]: {
         },
@@ -25,9 +25,9 @@ export default {
         [sizes.down("sm")]: {
         },
         [sizes.down("xs")]: {
-            margin: "5% 0% 5% 2%",
-            padding: "2% 2% 2% 2%",
-            fontSize: "12px"
+            margin: "5% 0% 5% 2%!important",
+            padding: "2% 2% 2% 2%!important",
+            fontSize: "12px!important"
         }
     },
     historyBox: {

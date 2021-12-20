@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -9,6 +9,12 @@ import {
 } from 'cdbreact';
 import { NavLink } from 'react-router-dom';
 const Sidebar = (props) => {
+  const[openX, setOpenX] = useState('');
+
+  useEffect(() => {
+    setOpenX(JSON.parse(localStorage.getItem('openx')) || false);
+  })
+
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial'}}>
       <CDBSidebar textColor="grey" backgroundColor="white" style={{  boxShadow: "5px 0px 7px 0px rgba(77,75,75,0.3)" }}>
@@ -31,6 +37,18 @@ const Sidebar = (props) => {
             <NavLink exact to="/history">
               <CDBSidebarMenuItem icon="history" style={{ color: 'grey' }}>History</CDBSidebarMenuItem>
             </NavLink>
+            {openX === true?
+              <div>
+                <NavLink exact to="/history">
+                  <CDBSidebarMenuItem icon="plus" style={{ color: 'grey' }}>Disease Treatment</CDBSidebarMenuItem>
+                </NavLink>
+                <NavLink exact to="/history">
+                  <CDBSidebarMenuItem icon="pen" style={{ color: 'grey' }}>Disease Information</CDBSidebarMenuItem>
+                </NavLink>
+              </div>
+            :
+            <div></div>
+            }
           </CDBSidebarMenu>
         </CDBSidebarContent>
         <CDBSidebarFooter style={{ textAlign: 'center', textDecoration: "none" }}>
