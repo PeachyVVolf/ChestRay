@@ -39,10 +39,10 @@ const Sidebar = (props) => {
             </NavLink>
             {openX === true?
               <div>
-                <NavLink exact to="/history">
+                <NavLink exact to="/diseaseTreatmentInfo">
                   <CDBSidebarMenuItem icon="plus" style={{ color: 'grey' }}>Disease Treatment</CDBSidebarMenuItem>
                 </NavLink>
-                <NavLink exact to="/history">
+                <NavLink exact to="/diseaseDetail">
                   <CDBSidebarMenuItem icon="pen" style={{ color: 'grey' }}>Disease Information</CDBSidebarMenuItem>
                 </NavLink>
               </div>

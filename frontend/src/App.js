@@ -9,6 +9,8 @@ import ForgotPass from './ForgotPass';
 import Profile from './Profile';
 import XrayHistory from './XrayHistory';
 import EditProfile from './EditProfile';
+import TreatmentInfo from './TreatmentInfo';
+import DiseaseInfo from './DiseaseInfo';
 
 function App() {
 
@@ -33,6 +35,10 @@ function App() {
           <Route exact path='/history' element={< XrayHistory />}>
           </Route>
           <Route exact path='/user/update' element={< EditProfile />}>
+          </Route>
+          <Route exact path='/diseaseTreatmentInfo' element={< TreatmentInfo />}>
+          </Route>
+          <Route exact path='/diseaseDetail' element={< DiseaseInfo />}>
           </Route>
         </Routes>
       </BrowserRouter>

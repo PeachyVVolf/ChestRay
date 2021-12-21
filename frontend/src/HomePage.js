@@ -16,7 +16,7 @@ const HomePage = (props) => {
     const [age, setAge] = useState('');
     const [email, setEmail] = useState('');
     const [gender, setGender] = useState('');
-    const [page, setPage] = useState( '' );
+    const [page, setPage] = useState( 'Dashboard' );
     const [open, setOpen] = useState(false);
     const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -38,7 +38,7 @@ const HomePage = (props) => {
 
     useEffect(() => {
         
-        setPage(JSON.parse(localStorage.getItem('openPage')) || false);
+        //setPage(JSON.parse(localStorage.getItem('openPage')) || false);
         if (token && token!=="" && token!==undefined){
             const opts = {
                 method: 'POST',

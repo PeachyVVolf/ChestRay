@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity, create_access_token
 from werkzeug.utils import secure_filename
 import json
+import chestAPI
 
 app = Flask(__name__)
 
@@ -105,7 +106,7 @@ def create_xray():
     Dimage = request.json.get("image", None)
     Did = request.json.get("id", None)
 
-    report = Report(Diseases="default disease", Probabilities="65%")
+    report = Report(Diseases="Pneumonia", Probabilities="65%")
     db.session.add(report)
     db.session.flush()
     xray = XRay(userID=Did, report=report.id, image=Dimage)
@@ -182,6 +183,18 @@ def change_profile():
     user.gender = newGender
     db.session.commit()
     return jsonify("Info Changed")
+
+#get Disease Treatment
+@app.route("/diseaseTreatment")
+def getDiseaseTreatment():
+    treatmentInfo = chestAPI.disease_treatment("Pneumonia")
+    return jsonify(treatmentInfo)
+
+#get Disease Information
+@app.route("/diseaseInfo")
+def getDiseaseInfo():
+    treatmentInfo = chestAPI.disease_description("Pneumonia")
+    return jsonify(treatmentInfo)
 
 if __name__ == "__main__":
     app.run(debug=True)
