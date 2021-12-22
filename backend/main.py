@@ -133,7 +133,7 @@ def uploadImage(id):
     data['imgID'] = [{
         'id': img.id}
     ]
-    with open("E:/University/Semester 6/ChestRay/frontend/public/temp.json", 'w') as outfile:
+    with open("../frontend/public/temp.json", 'w') as outfile:
         json.dump(data, outfile)
     return (redirect(url))
 
@@ -195,6 +195,25 @@ def getDiseaseTreatment():
 def getDiseaseInfo():
     treatmentInfo = chestAPI.disease_description("Pneumonia")
     return jsonify(treatmentInfo)
+
+#delete rep
+@app.route("/deleteRep", methods=["POST"])
+def deleteRep():
+    repID = request.json.get("repID", None)
+    ray = XRay.query.filter(XRay.id==repID).first()
+    rayImg = ray.image
+    XRay.query.filter(XRay.id==repID).delete()
+    db.session.commit()
+    rep = XRay.query.filter(XRay.id==repID).first()
+    Image.query.filter(Image.id==rayImg).delete()
+    db.session.commit()
+    
+    if not rep:
+        print("deleted")
+        return jsonify("Deleted")
+    else:
+        print("Not Deleted")
+        return jsonify("Couldn't Delete Image")
 
 if __name__ == "__main__":
     app.run(debug=True)

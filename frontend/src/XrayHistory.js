@@ -5,6 +5,7 @@ import Report from './report';
 import { withStyles } from '@mui/styles';
 import styles from './css/XrayHistoryStyles';
 import Sidebar from './SideBar';
+import DeleteRep from './DeleteRep';
 
 const XrayHistory = (props) => {
     const { classes } = props;
@@ -101,6 +102,7 @@ const XrayHistory = (props) => {
     const renderTableData = () => {
         return xrays.map((x, index) => {
            const { id, image, date } = x //destructuring
+        //    console.log(x)
            return (
               <div key={id}>
                   {getDisease(x, index)}
@@ -111,10 +113,10 @@ const XrayHistory = (props) => {
                         <div className={`col-3 ${classes.tableData}`}>
                             {date}
                         </div>
-                        <div className={`col-3 ${classes.tableData}`}>
+                        <div className={`col-2 ${classes.tableData}`}>
                             {disease[index] !== "" && disease[index]!==undefined? disease[index] : 'none'}
                         </div>
-                        <div className={`col-3 ${classes.tableData}`}>
+                        <div className={`col-2 ${classes.tableData}`}>
                             <Button
                             variant="primary"
                             type="button"
@@ -123,6 +125,9 @@ const XrayHistory = (props) => {
                             >
                                 View Report
                             </Button>
+                        </div>
+                        <div className={`col-2 ${classes.tableData}`}>
+                            <DeleteRep repID={id}/>
                         </div>
                     </div> 
                     <br />
