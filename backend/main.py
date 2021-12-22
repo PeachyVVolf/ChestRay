@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity, creat
 from werkzeug.utils import secure_filename
 import json
 import chestAPI
+import chestAPI_AI
 
 app = Flask(__name__)
 
@@ -105,8 +106,13 @@ def getXRays():
 def create_xray():
     Dimage = request.json.get("image", None)
     Did = request.json.get("id", None)
+    img = Image.query.filter(Image.id==Dimage).first()
+    if not img:
+        return(False)
 
-    report = Report(Diseases="Pneumonia", Probabilities="65%")
+    imgPath = "Images/"+img.name
+    prob = chestAPI_AI.predict_disease("model.h5", imgPath)
+    report = Report(Diseases="Pneumonia", Probabilities=prob)
     db.session.add(report)
     db.session.flush()
     xray = XRay(userID=Did, report=report.id, image=Dimage)
@@ -214,6 +220,12 @@ def deleteRep():
     else:
         print("Not Deleted")
         return jsonify("Couldn't Delete Image")
+
+# #AI Code
+# @app.route("AICode")
+# def get_AIStuff():
+
+#     return (True)
 
 if __name__ == "__main__":
     app.run(debug=True)

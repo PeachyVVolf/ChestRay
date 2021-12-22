@@ -15,4 +15,3 @@ def predict_disease(filename, image_address):
     result = model.predict([[final]])
     return str(round(result[0][0]*100,2))+"%"
 
-predict_disease("model.h5", "pn2.jpeg")

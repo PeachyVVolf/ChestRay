@@ -3,3 +3,7 @@ Flask-SQLAlchemy==2.5.1
 Flask-JWT-Extended==4.3.1
 Werkzeug==2.0.2
 requests==2.26.0
+tensorflow==2.7.0
+numpy==1.21.5
+Pillow==8.4.0
+matplotlib==3.5.1
