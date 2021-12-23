@@ -1,5 +1,8 @@
 # ChestRay
 # How to run this? 
+
+Note: Make sure you have Nodejs, npm, python and pip installed on your systems (these instructions are for windows. look up couter parts for mac)
+
 ### Running Backend
 1. cd into the ChestRay directory.
 2. Run
