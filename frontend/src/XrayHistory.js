@@ -1,3 +1,5 @@
+//Display all Xray history
+
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { useNavigate } from 'react-router-dom';

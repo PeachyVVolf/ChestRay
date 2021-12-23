@@ -1,3 +1,4 @@
+#This contains the API which gets the information about the disease and its treatment/precautions
 import requests
 def disease_treatment(name):
     url = "https://disease-detection.p.rapidapi.com/disease_precaution/" + str(name)

@@ -1,3 +1,5 @@
+#This contains the functionality to get an image, run analysis on it and find how much chances of pneumonia it has
+
 from tensorflow import keras
 import numpy as np
 from PIL import Image

@@ -1,3 +1,6 @@
+#This file contains all the API's made for the POST and GET commands called by the frontend. Also, has the DB Model and 
+#DB manipulation
+
 import os
 from datetime import datetime
 from flask import Flask, request, jsonify, redirect, Response
@@ -50,16 +53,16 @@ class XRay(db.Model):
     image = db.Column(db.Integer, db.ForeignKey("image.id"), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
-#register
+#register user and add to Users table in db
 @app.route("/reg", methods=["POST"])
 def create_user():
-    Demail = request.json.get("email", None)
+    Demail = request.json.get("email", None) #get parameters sent from front end in the fetch options
     Dpassword = request.json.get("password", None)
     Dname = request.json.get("name", None)
     Dage = request.json.get("age", None)
     Dgender = request.json.get("gender", None)
 
-    user = Users.query.filter_by(email = Demail).first()
+    user = Users.query.filter_by(email = Demail).first() # find if email already exists
     if user is None:
         user = Users(name=Dname, age=Dage, gender=Dgender, email=Demail, password=Dpassword)
         db.session.add(user)
@@ -69,49 +72,49 @@ def create_user():
 
     return jsonify({"msg": "Email Exists"}), 401
 
-#login
+#login user by checking email and password passed in fetch 
 @app.route("/token", methods=["POST"])
 def create_token():
     Demail = request.json.get("email", None)
     Dpassword = request.json.get("password", None)
-    if Users.query.filter_by(email = Demail).filter_by(password = Dpassword).first():
+    if Users.query.filter_by(email = Demail).filter_by(password = Dpassword).first(): #filter by email and password
         userA = db.session.query(Users).filter_by(email = Demail).filter_by(password = Dpassword).first()
-        access_token = create_access_token(identity=Demail)
+        access_token = create_access_token(identity=Demail) # if yes then generate access token for that email
         return jsonify({"access_token": access_token, "id": userA.id})
 
     return jsonify({"msg": "Incorrect email or password"}), 401
 
-#display userdata
+#return userdata for homepage
 @app.route("/homedata", methods=["POST"])
 def get_userData():
-    Did = request.json.get("id", None)
-    person = Users.query.filter_by(id=Did).first()
+    Did = request.json.get("id", None) #get ID of user logged in
+    person = Users.query.filter_by(id=Did).first() #searcg user data and return
     return jsonify({"name": person.name, "email": person.email,
                     "gender":person.gender, "age":person.age})
 
 #get XrayData
 @app.route("/xrays", methods=["POST"])
 def getXRays():
-    Did = request.json.get("id", None)
-    xrays = XRay.query.filter_by(userID=Did).all()
+    Did = request.json.get("id", None) #get ID of user logged in
+    xrays = XRay.query.filter_by(userID=Did).all() # find all xray for that user
     outlist = []
     for xray in xrays:
-        output = {"id":xray.id, "report":xray.report,
+        output = {"id":xray.id, "report":xray.report,# loop and add to a list
          "image":xray.image, "date":xray.date}
         outlist.append(output)
     return jsonify({'xray': outlist})
 
-#Add Xray
+#Add Xray to DB
 @app.route("/addxray", methods=["POST"])
 def create_xray():
     Dimage = request.json.get("image", None)
-    Did = request.json.get("id", None)
-    img = Image.query.filter(Image.id==Dimage).first()
+    Did = request.json.get("id", None) #get image and user ID
+    img = Image.query.filter(Image.id==Dimage).first() #if image wasnt already uploaded then can't generate xray report
     if not img:
         return(False)
 
     imgPath = "Images/"+img.name
-    prob = chestAPI_AI.predict_disease("model.h5", imgPath)
+    prob = chestAPI_AI.predict_disease("model.h5", imgPath)#else predict disease and generate reorot
     report = Report(Diseases="Pneumonia", Probabilities=prob)
     db.session.add(report)
     db.session.flush()
@@ -121,29 +124,29 @@ def create_xray():
     return jsonify(
         state=True)
 
-#Upload Image
+#Upload Image to DB
 @app.route("/upload/<int:id>", methods=["POST"])
 def uploadImage(id):
-    pic=request.files["image"]
+    pic=request.files["image"] # get input into form
     if not pic:
         return 'Picture not uploaded', 400
 
     filename = secure_filename(pic.filename)
     mimetype = pic.mimetype
 
-    img = Image(img = pic.read(), name=filename, mimetype=mimetype, userID=id)
+    img = Image(img = pic.read(), name=filename, mimetype=mimetype, userID=id) #create image object type
     db.session.add(img)
     db.session.commit()
-    url = "http://localhost:3000/addXray"
+    url = "http://localhost:3000/generateReport"
     data = {}
     data['imgID'] = [{
         'id': img.id}
     ]
     with open("../frontend/public/temp.json", 'w') as outfile:
         json.dump(data, outfile)
-    return (redirect(url))
+    return (redirect(url)) #redirect to addXray page
 
-#get Image
+#get Image from DB with /ID
 @app.route("/getImg/<int:imgID>")
 def get_img(imgID):
     img = Image.query.filter_by(id=imgID).first()
@@ -151,7 +154,7 @@ def get_img(imgID):
         return 'No Image', 404
     return Response(img.img, mimetype=img.mimetype )
 
-#get Report
+#get Report from DB with /ID
 @app.route("/getReport/<int:repID>")
 def get_rep(repID):
     rep = Report.query.filter_by(id=repID).first()
@@ -159,17 +162,17 @@ def get_rep(repID):
         return 'No Report', 404
     return jsonify({'disease': rep.Diseases, 'prob':rep.Probabilities})
 
-#changePass
+#changePass of user logged in
 @app.route("/changePass", methods=["POST"])
 def change_pass():
     newEmail = request.json.get("newEmail", None)
-    newPass = request.json.get("newPass", None)
+    newPass = request.json.get("newPass", None) #get email and password that was input into the change pw form by user
     print(newPass)
     user = Users.query.filter_by(email=newEmail).first()
-    if not user:
+    if not user: #check if email exists
         return jsonify("Email doesn't exist"), 404
     user.password = newPass
-    db.session.commit()
+    db.session.commit()#if yes then change password and commit
     return jsonify("Password Changed")
 
 #changeProfileInfo
@@ -178,8 +181,8 @@ def change_profile():
     newEmail = request.json.get("newEmail", None)
     newName = request.json.get("newName", None)
     newAge = request.json.get("newAge", None)
-    newGender = request.json.get("newGender", None)
-    user = Users.query.filter_by(email=newEmail).first()
+    newGender = request.json.get("newGender", None) #get Email, Name, Age, Gender passed in fetch
+    user = Users.query.filter_by(email=newEmail).first() #if email exists change user info otherwise dont
     if not user:
         return jsonify("Email doesn't exist"), 404
     user.name = newName
@@ -193,25 +196,25 @@ def change_profile():
 #get Disease Treatment
 @app.route("/diseaseTreatment")
 def getDiseaseTreatment():
-    treatmentInfo = chestAPI.disease_treatment("Pneumonia")
+    treatmentInfo = chestAPI.disease_treatment("Pneumonia") #access api to get treatment info
     return jsonify(treatmentInfo)
 
 #get Disease Information
 @app.route("/diseaseInfo")
 def getDiseaseInfo():
-    treatmentInfo = chestAPI.disease_description("Pneumonia")
+    treatmentInfo = chestAPI.disease_description("Pneumonia")#access api to get disease info
     return jsonify(treatmentInfo)
 
 #delete rep
 @app.route("/deleteRep", methods=["POST"])
 def deleteRep():
     repID = request.json.get("repID", None)
-    ray = XRay.query.filter(XRay.id==repID).first()
+    ray = XRay.query.filter(XRay.id==repID).first() #find and delte XRay but save img id
     rayImg = ray.image
     XRay.query.filter(XRay.id==repID).delete()
     db.session.commit()
-    rep = XRay.query.filter(XRay.id==repID).first()
-    Image.query.filter(Image.id==rayImg).delete()
+    rep = XRay.query.filter(XRay.id==repID).first() #check if xray was deleted
+    Image.query.filter(Image.id==rayImg).delete() #use img id to delete image
     db.session.commit()
     
     if not rep:

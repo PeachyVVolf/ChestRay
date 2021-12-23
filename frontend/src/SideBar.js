@@ -1,3 +1,5 @@
+// renders only the navbar and redirects
+
 import React, { useState, useEffect } from 'react';
 import {
   CDBSidebar,

@@ -1,10 +1,12 @@
+//This component is responsible only for rendering the progress bar on report
+
 const ProgressBar = (props) => {
     const { bgcolor, completed } = props;
   
     const containerStyles = {
       height: 20,
       width: '70%',
-      backgroundColor: "#e0e0de",
+      backgroundColor: "rgb(91,143,249)", //color of healthy
       borderRadius: 50,
       margin: 50
     }
@@ -12,7 +14,7 @@ const ProgressBar = (props) => {
     const fillerStyles = {
       height: '100%',
       width: `${completed}`,
-      backgroundColor: bgcolor,
+      backgroundColor: "rgb(97,221,170)",//color of disease
       borderRadius: 'inherit',
       textAlign: 'right'
     }

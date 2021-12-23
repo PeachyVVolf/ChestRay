@@ -1,3 +1,5 @@
+// React component which renders the disease info page and calls the api to get info
+
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@mui/styles';
 import styles from './css/AddStyles';

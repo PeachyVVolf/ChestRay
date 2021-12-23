@@ -1,3 +1,5 @@
+// view report func
+
 import React, { useState, useEffect, Component, PropTypes}  from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { withStyles } from '@mui/styles';

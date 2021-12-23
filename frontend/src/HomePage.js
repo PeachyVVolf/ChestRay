@@ -1,3 +1,5 @@
+//Home page component. Renders user info and other static info.
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import XrayHistory from './XrayHistory';

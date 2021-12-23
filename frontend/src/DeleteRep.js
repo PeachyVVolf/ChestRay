@@ -1,3 +1,6 @@
+// React Component responsible for delete functionality. This is called in the history page against a data. This renders
+// the delete button
+
 import react from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { withStyles } from '@mui/styles';

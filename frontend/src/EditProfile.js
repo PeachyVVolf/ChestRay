@@ -1,3 +1,6 @@
+//React component responsible for editing user profile. it sends data entered to back end which changes the info
+// if some conditions meet
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";

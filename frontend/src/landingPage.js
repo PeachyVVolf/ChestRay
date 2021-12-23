@@ -1,3 +1,5 @@
+//Landing page. Renders only login and sign up buttons 
+
 import React from 'react';
 import { withStyles } from '@mui/styles';
 import styles from './css/LandingPageStyles';

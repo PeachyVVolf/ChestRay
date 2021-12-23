@@ -1,3 +1,5 @@
+// Get treatment info from API and display
+
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@mui/styles';
 import styles from './css/AddStyles';

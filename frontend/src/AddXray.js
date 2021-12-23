@@ -1,3 +1,6 @@
+// React Component for generate report page. getData func gets the current image uploaded. handle click generates the report
+// for it. ID is user id and token is the access token
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from "react-bootstrap/Form";
